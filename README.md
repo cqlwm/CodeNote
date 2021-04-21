@@ -2,6 +2,12 @@
 
 
 
+# 服务器
+
+**Apache**
+
+https://github.com/cqlwm/CodeNote/blob/main/Apache.md
+
 
 
 # 配置

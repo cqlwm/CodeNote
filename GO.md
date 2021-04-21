@@ -26,6 +26,95 @@ gomod 和 gopath 两个包管理方案，并且相互不兼容。
 
 
 
+## 使用GOMODEL
+
+**init**
+
+`go mod init`
+
+
+
+**设置代理**
+
+<img src="assets/image-20210407103921307.png" alt="image-20210407103921307" style="zoom:80%;" />
+
+```
+https://goproxy.io,direct
+```
+
+
+
+**env**
+
+```shell
+go env -w GOPROXY=https://goproxy.io,direct
+go env -w GOPRIVATE=*.corp.example.com
+go env -w GO111MODULE=off
+
+############################
+F:\workhome\GO\src\test01>go env
+# 开启
+set GO111MODULE=on
+set GOARCH=amd64
+set GOBIN=
+set GOCACHE=C:\Users\lwm\AppData\Local\go-build
+set GOENV=C:\Users\lwm\AppData\Roaming\go\env
+set GOEXE=.exe
+set GOFLAGS=
+set GOHOSTARCH=amd64
+set GOHOSTOS=windows
+set GOINSECURE=
+set GOMODCACHE=F:\workhome\GO\pkg\mod
+# *.corp.example.com
+set GONOPROXY=*.corp.example.com
+set GONOSUMDB=*.corp.example.com
+set GOOS=windows
+set GOPATH=F:\workhome\GO
+set GOPRIVATE=*.corp.example.com
+set GOPROXY=https://goproxy.io,direct
+set GOROOT=D:\Software\GO
+set GOSUMDB=sum.golang.org
+set GOTMPDIR=
+set GOTOOLDIR=D:\Software\GO\pkg\tool\windows_amd64
+set GOVCS=
+set GOVERSION=go1.16
+set GCCGO=gccgo
+set AR=ar
+set CC=gcc
+set CXX=g++
+set CGO_ENABLED=1
+## GOMOD
+set GOMOD=F:\workhome\GO\src\test01\go.mod
+set CGO_CFLAGS=-g -O2
+set CGO_CPPFLAGS=
+set CGO_CXXFLAGS=-g -O2
+set CGO_FFLAGS=-g -O2
+set CGO_LDFLAGS=-g -O2
+set PKG_CONFIG=pkg-config
+set GOGCCFLAGS=-m64 -mthreads -fno-caret-diagnostics -Qunused-arguments -fmessage-length=0 -fdebug-prefix-map=C:\Users\lwm\AppData\Local
+\Temp\go-build365770493=/tmp/go-build -gno-record-gcc-switches
+```
+
+
+
+
+
+# 开发中的常见问题
+
+## import cycle not allowed
+
+golang不允许循环导包,如果检测到import cycle，会在编译时报错，通常import cycle是因为设计错误或包的规划问题。
+
+> 在设计时尽量用报名规范包中各大函数的统一作用，一定要避免一个包中的方法做不一样的事情。
+>
+> 一个包中的方法做多件事情，容易引发包之间的循环应用问题。
+>
+> 例如：
+>
+> handler包下面的所有方法都只负责请求的处理与响应，不涉及任何业务逻辑。
+
+
+
 # 概述
 
 
@@ -189,6 +278,119 @@ func main() {
 
 
 ## 并发
+
+
+
+
+
+# GO Web
+
+> 常见的GO Web框架
+>
+> - httprouter
+>
+>   https://github.com/julienschmidt/httprouter
+>
+> - Beego
+>
+> - Echo
+>
+> - Gin
+
+
+
+
+
+## RESTful
+
+### 1. 什么是REST
+
+REST全称是Representational State Transfer，中文意思是表述性状态转移。REST指的是一组架构约束条件和原则。RESTful架构。
+
+REST本身并没有创造新的技术、组件或服务，而隐藏在RESTful背后的理念就是使用Web的现有特征和能力， 更好地使用现有Web标准中的一些准则和约束。虽然REST本身受Web技术的影响很深， 但是*理论上REST架构风格并不是绑定在HTTP上*，只不过目前HTTP是唯一与REST相关的实例。 所以我们这里描述的REST也是通过HTTP实现的REST。
+
+
+
+### 2. 理解RESTful
+
+**资源与URI**
+
+REST全称是表述性状态转移，那究竟指的是什么的表述? 其实指的就是资源。任何事物，只要有被引用到的必要，它就是一个资源。
+
+要让一个资源可以被识别，需要有个唯一标识，在Web中这个唯一标识就是URI(Uniform Resource Identifier)。
+
+URI的设计应该遵循可寻址性原则，具有自描述性，需要在形式上给人以直觉上的关联。
+
+> URI设计技巧:
+>
+> - 使用_或-来让URI可读性更好
+> - 使用/来表示资源的层级关系
+> - 使用?用来过滤资源
+> - ,或;可以用来表示同级资源的关系
+
+**统一资源接口**
+
+
+
+## 数据库操作
+
+```go
+sql := fmt.Sprintf(
+"select %s from pest_tables pt where name like ? or alias_name like ? or scientific_name like ? ",
+"id, name, alias_name, scientific_name, shape, habit, harm, parasitic, distribution, govern_method, pest_image")
+name = fmt.Sprintf("%%%s%%", name)
+
+db := config.DataBase
+rows, err := db.Debug().Raw(sql, name, name, name).Rows()
+defer rows.Close()
+
+if err != nil {
+	return nil
+}
+
+for rows.Next() {
+    table := entry.PestTable{}
+    _ = db.ScanRows(rows, &table)
+    pestArray = append(pestArray, table)
+}
+
+err = config.SaveKJson(key, pestArray, 0)
+if err != nil {
+    fmt.Println(err)
+}
+
+return pestArray
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

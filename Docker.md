@@ -104,7 +104,6 @@ sudo yum remove docker \
 # 需要的安装包
 sudo yum install -y yum-utils
 
-
 # 设置镜像
 sudo yum-config-manager \
     --add-repo \
@@ -146,11 +145,24 @@ sudo rm -rf /var/lib/docker
 
 ```shell
 sudo mkdir -p /etc/docker
+
+# 方式1
 sudo tee /etc/docker/daemon.json <<-'EOF'
 {
   "registry-mirrors": ["https://hn3mnwj7.mirror.aliyuncs.com"]
 }
 EOF
+
+# 方式2
+vim /etc/docker/daemon.json
+{
+  "registry-mirrors": [
+    "https://registry.docker-cn.com",
+    "http://hub-mirror.c.163.com",
+    "https://docker.mirrors.ustc.edu.cn"
+  ]
+}
+
 sudo systemctl daemon-reload
 sudo systemctl restart docker
 ```
