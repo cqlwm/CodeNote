@@ -364,6 +364,32 @@ return pestArray
 
 
 
+## 文件上传
+
+```go
+func getQueryParam(c *gin.Context) (*multipart.FileHeader, string, config.CM) {
+	form, err := c.MultipartForm()
+	if err != nil {
+		return nil, "", &config.FORM_ERROR
+	}
+	// 获取图片
+	pictures := form.File["picture"]
+	if pictures == nil {
+		return nil, "", &config.PICTURE_PARAM_ERROR
+	}
+	_, isImage := util.IsImage(pictures[0].Filename)
+	if !isImage {
+		return nil, "", &config.PICTURE_FORMAT_ERROR
+	}
+	// 获取选择参数
+	choice := form.Value["Choice"]
+	if choice == nil || len(choice) == 0 || !isFourOne(choice[0]) {
+		return nil, "", &config.PARAM_ERROR
+	}
+	return pictures[0], choice[0], nil
+}
+```
+
 
 
 
