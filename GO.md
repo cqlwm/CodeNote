@@ -342,11 +342,11 @@ name = fmt.Sprintf("%%%s%%", name)
 
 db := config.DataBase
 rows, err := db.Debug().Raw(sql, name, name, name).Rows()
-defer rows.Close()
 
 if err != nil {
 	return nil
 }
+defer rows.Close()
 
 for rows.Next() {
     table := entry.PestTable{}

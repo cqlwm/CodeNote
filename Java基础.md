@@ -96,3 +96,21 @@ public class TestQ1 {
 
 
 
+## 带泛型的重载：Fail？
+
+```java
+public static <W> ResultBody<W> OK(W w) {
+    ResultBody<W> resultBody = new ResultBody<W>()
+        .setSuccess(true)
+        .setCode(RCode.REQ_SUCCESS.code)
+        .setMessage(RCode.REQ_SUCCESS.reasonPhrase)
+        .setContent(w);
+    return resultBody;
+}
+
+public static ResultBody OK(RCode rCode) {
+
+    return null;
+}
+```
+
